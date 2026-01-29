@@ -5,6 +5,8 @@ from rest_framework import status
 
 from .models import Node
 from .serializers import NodeSerializer
+from .models import Node
+from .serializers import NodeSerializer
 
 
 class FolderChildrenView(APIView):
@@ -28,3 +30,15 @@ class FolderChildrenView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class FolderPathView(APIView):
+    """
+    Retorna o caminho (breadcrumb) até a pasta.
+    """
+
+    def get(self, request, folder_id):
+        try:
+            folder = Node.objects.get(id=folder_id)
+        except Node.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        return Response(folder.get_path())

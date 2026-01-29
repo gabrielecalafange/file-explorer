@@ -14,3 +14,12 @@ class NodeSerializer(serializers.ModelSerializer):
             "created_at",
         ]
 
+    def validate_parent(self, parent):
+        if parent and parent.type == Node.FILE:
+            raise serializers.ValidationError(
+                "Cannot create a node inside a file."
+            )
+        return parent
+    
+    def get_size(self, obj):
+        return obj.calculate_size()

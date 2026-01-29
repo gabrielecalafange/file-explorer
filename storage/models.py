@@ -39,3 +39,12 @@ class Node(models.Model):
     def __str__(self):
         return f"{self.name} ({self.type})"
 
+    def calculate_size(self):
+        if self.type == self.FILE:
+            return self.size
+
+        total = 0
+        for child in self.children.all():
+            total += child.calculate_size()
+
+        return total

@@ -48,3 +48,15 @@ class Node(models.Model):
             total += child.calculate_size()
 
         return total
+
+    def get_path(self):
+        """
+        Retorna uma lista de dicionários com o caminho completo até este nó,
+        começando na raiz e terminando no próprio nó.
+        """
+        parts = []
+        current = self
+        while current:
+            parts.append({"id": str(current.id), "name": current.name})
+            current = current.parent
+        return list(reversed(parts))
